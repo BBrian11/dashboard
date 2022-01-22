@@ -21,9 +21,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { setUserSession } from '../../Utils/Common';
 
-
-
- const schema = yup.object().shape({
+const schema = yup.object().shape({
   //email: yup.string().email('You must enter a valid email').required('You must enter a email'),
   password: yup
     .string()

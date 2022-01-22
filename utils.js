@@ -13,9 +13,17 @@ function generateToken(user) {
     isAdmin: user.isAdmin
   };
 
-  return jwt.sign(u, process.env.JWT_SECRET, {
+  const accessToken =  jwt.sign(u, process.env.JWT_SECRET, {
     expiresIn: 60 * 60 * 24 // expira en 24 horas
   });
+  const refreshToken =  jwt.sign(u, process.env.JWT_REFRESH, {
+    expiresIn: "90d"
+  });
+  
+  return {
+    access_token:accessToken,
+    refresh_token:refreshToken
+  };
 }
 
 
@@ -30,33 +38,33 @@ function getCleanUser(user) {
   };
 }
 class TokenService {
-  getLocalRefreshToken() {
-    const user = JSON.parse(localStorage.getItem("user"));
+  getSessionStorageRefreshToken() {
+    const user = JSON.parse(sessionStorage.getItem("user"));
     return user?.refreshToken;
   }
 
-  getLocalAccessToken() {
-    const user = JSON.parse(localStorage.getItem("user"));
+  getSessionStorageAccessToken() {
+    const user = JSON.parse(sessionStorage.getItem("user"));
     return user?.accessToken;
   }
 
-  updateLocalAccessToken(token) {
-    let user = JSON.parse(localStorage.getItem("user"));
+  updateSessionStorageAccessToken(token) {
+    let user = JSON.parse(sessionStorage.getItem("user"));
     user.accessToken = token;
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("user", JSON.stringify(user));
   }
 
   getUser() {
-    return JSON.parse(localStorage.getItem("user"));
+    return JSON.parse(sessionStorage.getItem("user"));
   }
 
   setUser(user) {
     console.log(JSON.stringify(user));
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("user", JSON.stringify(user));
   }
 
   removeUser() {
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
   }
 }
 module.exports = {

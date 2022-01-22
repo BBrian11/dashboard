@@ -114,6 +114,36 @@ app.get('/verifyToken', function (req, res) {
   });
 });
 
+app.post('/refresh',(req,res)=>{
+  const {body} = req;
+  const {refresh_token} = body;
+
+  if(!refresh_token){
+    return res.status(400).json({
+      error:true,
+      message:"Missing refresh token"
+    });
+  }
+
+  try{
+    const decodeToken = jwt.decode(refresh_token,{complete:true});
+   console.log(decodeToken);
+
+    const newToken = utils.generateToken(decodeToken);
+
+    return res.status(201).json({
+      error:false,
+      token: newToken
+    })
+
+  }catch{
+    return res.status(401).json({
+      error: true,
+      message: "Invalid refresh token"
+    })
+  }
+})
+
 app.listen(port, () => {
   console.log('Server started on: ' + port);
 });

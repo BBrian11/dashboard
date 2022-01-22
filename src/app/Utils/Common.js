@@ -20,3 +20,5 @@ export const getUser = () => {
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('user', JSON.stringify(user));
   }
+  
+  
