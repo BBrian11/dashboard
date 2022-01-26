@@ -9,9 +9,6 @@ import './styles/app-utilities.css';
 import App from 'app/App';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
-import React from 'react';
-
-
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

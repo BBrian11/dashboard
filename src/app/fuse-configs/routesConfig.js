@@ -19,9 +19,6 @@ const routes = [
     component: () => <Redirect to="/login" />,
   },
   {
-		component:() => <Redirect to="/dashboard"/>
-	},
-  {
     path: '/404',
     component: () => <Error404Page />,
   },

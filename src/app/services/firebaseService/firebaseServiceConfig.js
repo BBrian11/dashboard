@@ -1,21 +1,19 @@
 const prodConfig = {
-  apiKey: "AIzaSyCgWTdoahNIQTenFMpfGUhrkNvEHhym-xE",
-  authDomain: "pedidosreact.firebaseapp.com",
-  projectId: "pedidosreact",
-  storageBucket: "pedidosreact.appspot.com",
-  messagingSenderId: "878564978793",
-  appId: "1:878564978793:web:b2bc4d394ae87f56e572f8",
-  measurementId: "G-TTF4GJNE8G"
+  // apiKey           : "YOUR_API_KEY",
+  // authDomain       : "your-app.firebaseapp.com",
+  // databaseURL      : "https://your-app.firebaseio.com",
+  // projectId        : "your-app",
+  // storageBucket    : "your-app.appspot.com",
+  // messagingSenderId: "YOUR_MESSAGING_SENDER_ID"
 };
 
 const devConfig = {
-  apiKey: "AIzaSyCgWTdoahNIQTenFMpfGUhrkNvEHhym-xE",
-  authDomain: "pedidosreact.firebaseapp.com",
-  projectId: "pedidosreact",
-  storageBucket: "pedidosreact.appspot.com",
-  messagingSenderId: "878564978793",
-  appId: "1:878564978793:web:b2bc4d394ae87f56e572f8",
-  measurementId: "G-TTF4GJNE8G"
+  // apiKey           : "YOUR_API_KEY",
+  // authDomain       : "your-app.firebaseapp.com",
+  // databaseURL      : "https://your-app.firebaseio.com",
+  // projectId        : "your-app",
+  // storageBucket    : "your-app.appspot.com",
+  // messagingSenderId: "YOUR_MESSAGING_SENDER_ID"
 };
 
 const config = process.env.NODE_ENV === 'production' ? prodConfig : devConfig;
