@@ -5,7 +5,7 @@ const cartReducer = (state, action) => {
     switch (action.type) {
         case ACTIONS.CREATE:
             // TODO: empty the local storage
-            return { ...state, loading: false, error: false, orders: null }
+            return { ...state, loading: false, error: false, order: null }
         case ACTIONS.ADD_TO_CART:
         case ACTIONS.ADD_ITEM:
         case ACTIONS.REMOVE_ITEM:

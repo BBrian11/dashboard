@@ -19,9 +19,11 @@ import BasicInfoTab from './tabs/BasicInfoTab';
 import PricingTab from './tabs/PricingTab';
 import ProductImagesTab from './tabs/ProductImagesTab';
 import BranchOfficeTab from './tabs/BranchOfficeTab';
+import ProviderTab from './tabs/ProviderTab';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Config from './../../../../../_mysource/config/Config';
+import { useTranslation } from 'react-i18next';
 
 
 const Root = styled(FusePageCarded)(({ theme }) => ({
@@ -58,7 +60,7 @@ function ProductDialog(props) {
   const name = watch('name');
   const image_list = watch('image_list');
   const url = (image_list.length > 0) ? Config.getInstance().getApiBasePath() + '/' + image_list[0].url : null;
-
+  const { t } = useTranslation('ecommercepage');
 
   /**
    * Initialize Dialog with Data
@@ -115,18 +117,19 @@ function ProductDialog(props) {
     closeComposeDialog();
   }
 
-  /**
-   * Remove Event
-   */
-  function handleRemove() {
-    //  dispatch(removeContact(id));
-    closeComposeDialog();
-  }
 
   function handleTabChange(event, value) {
     setTabValue(value);
   }
 
+  const renderClose = () => {
+    return <div className="px-16">
+      <Button className="m-4" variant="contained"
+        onClick={closeComposeDialog}>
+        {t('CLOSE')}
+      </Button>
+    </div>
+  }
 
   return (
     <Dialog
@@ -140,7 +143,7 @@ function ProductDialog(props) {
       <AppBar position="static" elevation={0}>
         <Toolbar className="flex w-full">
           <Typography variant="subtitle1" color="inherit">
-            {dialog.type === 'new' ? 'New Product' : 'Edit Product'}
+            {dialog.type === 'new' ? t('DIALOGNEW') : t('DIALOGEDIT')}
           </Typography>
         </Toolbar>
         <div className="flex flex-col items-center justify-center pb-24">
@@ -165,10 +168,11 @@ function ProductDialog(props) {
             variant="scrollable"
             scrollButtons="auto"
             classes={{ root: 'w-full h-64' }}>
-            <Tab className="h-64" label="Basic Info" />
-            <Tab className="h-64" label="Pricing" />
-            <Tab className="h-64" label="Branch Office" />
-            <Tab className="h-64" label="Images" />
+            <Tab className="h-64" label={t('TABBASICINFO')} />
+            <Tab className="h-64" label={t('TABPRICING')} />
+            <Tab className="h-64" label={t('TABBRANCH')} />
+            <Tab className="h-64" label={t('TABPROVIDER')} />
+            <Tab className="h-64" label={t('TABIMAGE')} />
           </Tabs>
 
           <div className="p-16 sm:p-24 max-w-2xl">
@@ -185,6 +189,10 @@ function ProductDialog(props) {
             </div>
 
             <div className={tabValue !== 3 ? 'hidden' : ''}>
+              <ProviderTab />
+            </div>
+
+            <div className={tabValue !== 4 ? 'hidden' : ''}>
               <ProductImagesTab />
             </div>
           </div>
@@ -201,9 +209,10 @@ function ProductDialog(props) {
                 disabled={isEmpty(dirtyFields) || !isValid}
                 onClick={onSubmit}
               >
-                Add
+                {t('ADD')}
               </Button>
             </div>
+            {renderClose()}
           </DialogActions>
         ) : (
           <DialogActions className="justify-between p-4 pb-16">
@@ -215,15 +224,10 @@ function ProductDialog(props) {
                 disabled={isEmpty(dirtyFields) || !isValid}
                 onClick={onSubmit}
               >
-                Save
+                {t('SAVE')}
               </Button>
             </div>
-            <div className="px-16">
-              <Button className="m-4" variant="contained"
-                onClick={closeComposeDialog}>
-                Close
-              </Button>
-            </div>
+            {renderClose()}
           </DialogActions>
         )}
       </FormProvider>

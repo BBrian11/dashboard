@@ -131,7 +131,7 @@ class JwtService extends FuseUtils.EventEmitter {
     }
 
     if (refresh_token) {
-      localStorage.setItem('jwt_refresh_token', access_token);
+      localStorage.setItem('jwt_refresh_token', refresh_token);
     } else {
       localStorage.removeItem('jwt_refresh_token');
     }

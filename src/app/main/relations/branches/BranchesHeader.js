@@ -6,10 +6,12 @@ import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { selectMainTheme } from 'app/store/fuse/settingsSlice';
+import { useTranslation } from 'react-i18next';
 
 
 function BranchesHeader(props) {
   const mainTheme = useSelector(selectMainTheme);
+  const { t } = useTranslation('relationspage');
 
   return (
     <div className="flex flex-1 items-center justify-between p-4 sm:p-24">
@@ -42,7 +44,7 @@ function BranchesHeader(props) {
             delay={300}
             className="hidden sm:flex text-16 md:text-24 mx-12 font-semibold"
           >
-            Sucursales
+            {t('TITLE')}
           </Typography>
         </div>
       </div>

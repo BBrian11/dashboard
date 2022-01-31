@@ -8,6 +8,7 @@ import FuseLoading from '@fuse/core/FuseLoading';
 import OrderContext from '../../../../_mysource/context/order/OrderContext';
 import find from 'lodash/find';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 const orderStatuses = [
   {
@@ -18,6 +19,7 @@ const orderStatuses = [
 function OrdersList(props) {
   const { orders, loading, retrieve, openEditDialog } = useContext(OrderContext);
   const routeParams = useParams();
+  const { t } = useTranslation('ecommercepage');
 
   useEffect(() => {
     const { branchid } = routeParams;
@@ -50,7 +52,7 @@ function OrdersList(props) {
         )
       },
       {
-        Header: 'Estado',
+        Header: t('STATUS'),
         accessor: 'order_status.name',
         className: 'font-medium',
         sortable: true,
@@ -89,7 +91,7 @@ function OrdersList(props) {
     return (
       <div className="flex flex-1 items-center justify-center h-full">
         <Typography color="textSecondary" variant="h5">
-          There are no orders!
+          {t('NOORDERS')}
         </Typography>
       </div>
     );

@@ -3,18 +3,13 @@ import ProductImageService from './ProductImageService';
 
 class ProductService extends GenericApiService {
     constructor() {
-        const queryparams = ['branch=all']
+        const queryparams = ['branch=all', "provider=all"]
         super('product', queryparams);
         this._img = new ProductImageService();
     }
 
-    retrieveAll = async () => {
-        super.setParams(['branch=all']);
-        return await super.retrieve();
-    }
-
-    retrieveByBranch = async (id) => {
-        super.setParams([`branch=${id}`]);
+    retrieve = async (branch = null, provider = null, activeonly = false) => {
+        super.setParams([`branch=${branch || "all"}`, `provider=${provider || "all"}`, `activeonly=${(activeonly) ? "yes" : "no"}`]);
         return await super.retrieve();
     }
 

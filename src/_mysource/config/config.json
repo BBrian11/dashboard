@@ -1,8 +1,8 @@
 {
-    "development": {
-        "api": "http://localhost:5000/api"
-    },
-    "production": {
-        "api": "http://vps-1923346-x.dattaweb.com:5000/api"
-    }
+  "development": {
+    "api": "http://vps-1923346-x.dattaweb.com:5001/api"
+  },
+  "production": {
+    "api": "http://vps-1923346-x.dattaweb.com:5001/api"
+  }
 }

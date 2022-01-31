@@ -15,7 +15,7 @@ import * as yup from 'yup';
 import { TextField } from '@mui/material';
 import BranchContext from '_mysource/context/branch/BranchContext';
 import Branch from '_mysource/models/Branch';
-
+import { useTranslation } from 'react-i18next';
 
 /**
  * Form Validation Schema
@@ -27,7 +27,7 @@ const schema = yup.object().shape({
 function BranchDialog(props) {
   const defaultValues = new Branch();
   const { dialog, closeDialog, create, update } = useContext(BranchContext);
-
+  const { t } = useTranslation('relationspage');
   const { control, watch, reset, handleSubmit, formState, getValues } = useForm({
     mode: 'onChange',
     defaultValues,
@@ -91,12 +91,13 @@ function BranchDialog(props) {
     closeComposeDialog();
   }
 
-  /**
-   * Remove Event
-   */
-  function handleRemove() {
-    //  dispatch(removeContact(id));
-    closeComposeDialog();
+  const renderClose = () => {
+    return <div className="px-16">
+      <Button className="m-4" variant="contained"
+        onClick={closeComposeDialog}>
+        {t('CLOSE')}
+      </Button>
+    </div>
   }
 
   return (
@@ -112,7 +113,7 @@ function BranchDialog(props) {
       <AppBar position="static" elevation={0}>
         <Toolbar className="flex w-full">
           <Typography variant="subtitle1" color="inherit">
-            {dialog.type === 'new' ? 'New Branch' : 'Edit Branch'}
+            {dialog.type === 'new' ? t('DIALOGNEW') : t('DIALOGEDIT')}
           </Typography>
         </Toolbar>
         <div className="flex flex-col items-center justify-center pb-24">
@@ -142,7 +143,7 @@ function BranchDialog(props) {
                   {...field}
                   value={field.value || ''}
                   className="mb-24"
-                  label="Name"
+                  label={t('NAME')}
                   id="name"
                   error={!!errors.name}
                   helperText={errors?.name?.message}
@@ -165,7 +166,7 @@ function BranchDialog(props) {
                   {...field}
                   value={field.value || ''}
                   className="mb-24"
-                  label="Fiscal Code"
+                  label={t('FISCALCODE')}
                   id="fiscal_code"
                   variant="outlined"
                   fullWidth
@@ -186,7 +187,7 @@ function BranchDialog(props) {
                   {...field}
                   value={field.value || ''}
                   className="mb-24"
-                  label="Phone"
+                  label={t('PHONE')}
                   id="phone"
                   variant="outlined"
                   fullWidth
@@ -228,7 +229,7 @@ function BranchDialog(props) {
                   {...field}
                   value={field.value || ''}
                   className="mb-24"
-                  label="Notes"
+                  label={t('NOTES')}
                   id="notes"
                   variant="outlined"
                   multiline
@@ -249,9 +250,10 @@ function BranchDialog(props) {
                 type="submit"
                 disabled={isEmpty(dirtyFields) || !isValid}
               >
-                Add
+                {t('ADD')}
               </Button>
             </div>
+            {renderClose()}
           </DialogActions>
         ) : (
           <DialogActions className="justify-between p-4 pb-16">
@@ -262,15 +264,10 @@ function BranchDialog(props) {
                 type="submit"
                 disabled={isEmpty(dirtyFields) || !isValid}
               >
-                Save
+                {t('SAVE')}
               </Button>
             </div>
-            <div className="px-16">
-              <Button className="m-4" variant="contained"
-                onClick={closeComposeDialog}>
-                Close
-              </Button>
-            </div>
+            {renderClose()}
           </DialogActions>
         )}
       </form>

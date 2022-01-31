@@ -1,4 +1,4 @@
-import { useMemo, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import CartContext from '_mysource/context/cart/CartContext';
 import OrderItemCard from "./OrderItemCard";
 import List from '@mui/material/List';
@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import ConfirmDialog from "../../../../_mysource/shared-components/confirm-dialog/ConfirmDialog";
 import { useSnackbar } from 'notistack';
 import NotificationTemplate from '_mysource/shared-components/snackbar/NotificationTemplate';
+import { useTranslation } from 'react-i18next';
 
 
 const CartSidebarContent = () => {
@@ -18,6 +19,7 @@ const CartSidebarContent = () => {
     const disabled = (order && order.order_item_list.length > 0) ? false : true;
     const final_amount = Format.getInstance().price((order) ? order.final_amount : 0);
     const net_amount = Format.getInstance().price((order) ? order.net_amount : 0);
+    const { t } = useTranslation('ecommercepage');
 
     const handlePlaceOrder = () => {
         createOrder(order);
@@ -78,10 +80,10 @@ const CartSidebarContent = () => {
                         setDialogOpen(true)
                     }
                     }
-                    disabled={disabled}>Placer Order</Button>
+                    disabled={disabled}>{t('PLACEORDER')}</Button>
             </div>
             <ConfirmDialog
-                title="Crear el pedido?"
+                title={t('CARTDIALOGTITLE')}
                 body={getOrderInfoForDialogBody()}
                 open={dialogOpen}
                 setOpen={setDialogOpen}

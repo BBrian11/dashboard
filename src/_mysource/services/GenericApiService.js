@@ -4,70 +4,79 @@ import CustomError from "../models/CustomError";
 
 const config = new Config();
 
-const getBearerToken = () => {
-  const token = localStorage.getItem("jwt_access_token");
-
-  return token ?? null;
-};
-
-const getAuthorizationHeader = () => {
-  const bearerToken = getBearerToken();
-
-  return bearerToken
-    ? {
-        Authorization: `Bearer ${getBearerToken()}`,
-      }
-    : {};
-};
-
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: config.getApiBasePath(),
-  headers: {
-    ...getAuthorizationHeader(),
-  },
 });
 
-axiosInstance.interceptors.response.use(
-  (response) => response,
+axiosInstance.interceptors.request.use(
+  (configAxios) => {
+    const token = localStorage.getItem("jwt_access_token");
+
+    if (token && configAxios.url.indexOf("/login") === -1) {
+      configAxios.headers.Authorization = token;
+    }
+
+    return configAxios;
+  },
   (error) => {
-    const { response } = error;
+    return Promise.reject(error);
+  }
+);
 
-    if (response) {
-      const { status } = response;
-      const refreshToken = localStorage.getItem("jwt_refresh_token");
+axiosInstance.interceptors.response.use(
+  (res) => {
+    return res;
+  },
+  async (err) => {
+    const originalConfig = err.config;
 
-      if (status === 401 && refreshToken) {
-        return axiosInstance
-          .post(
-            "/auth/refresh",
+    if (err.response) {
+      if (err.response.status === 401 && !originalConfig._retry) {
+        originalConfig._retry = true;
+
+        try {
+          const requestRefresh = await axios.post(
+            `${config.getApiBasePath()}/auth/refresh`,
             {},
             {
               headers: {
-                Authorization: refreshToken,
+                Authorization: localStorage.getItem("jwt_refresh_token"),
               },
             }
-          )
-          .then((tokenResponse) => {
-            const responseData = tokenResponse.data;
+          );
 
-            // eslint-disable-next-line camelcase
-            const { token, refresh_token } = responseData;
+          const { data } = requestRefresh;
 
-            localStorage.setItem("jwt_access_token", token);
-            localStorage.setItem("jwt_refresh_token", refresh_token);
+          localStorage.setItem("jwt_access_token", data.token);
+          localStorage.setItem("jwt_refresh_token", data.refresh_token);
 
-            return axiosInstance.request(error.config);
-          })
-          .catch((refreshError) => {
+          axiosInstance.defaults.headers.common.jwt_refresh_token =
+            data.refresh_token;
+
+          return axiosInstance(originalConfig);
+        } catch (_error) {
+          if (_error.response && _error.response.data) {
             localStorage.removeItem("jwt_access_token");
-            localStorage.removeItem("jwt_refreshs_token");
+            localStorage.removeItem("jwt_refresh_token");
 
-            return Promise.reject(error);
-          });
+            axiosInstance.defaults.headers.common.jwt_access_token = null;
+            axiosInstance.defaults.headers.common.jwt_refresh_token = null;
+
+            window.location.href = "/login";
+
+            return Promise.reject(_error.response.data);
+          }
+
+          return Promise.reject(_error);
+        }
+      }
+
+      if (err.response.status === 403 && err.response.data) {
+        return Promise.reject(err.response.data);
       }
     }
 
-    throw error;
+    return Promise.reject(err);
   }
 );
 

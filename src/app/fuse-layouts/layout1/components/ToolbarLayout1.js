@@ -64,8 +64,6 @@ function ToolbarLayout1(props) {
 
             <FuseSearch />
 
-            <QuickPanelToggleButton />
-
             <UserMenu />
           </div>
 

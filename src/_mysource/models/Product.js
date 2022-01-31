@@ -6,6 +6,7 @@ class Product {
     modifier_list = [];
     category_list = [];
     branch_office_list = [];
+    provider_list = [];
     image_list = [];
     enabled = false;
 }

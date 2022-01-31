@@ -6,7 +6,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Icon from '@mui/material/Icon';
-import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useCallback, useEffect, useContext } from 'react';
@@ -16,6 +15,7 @@ import * as yup from 'yup';
 import ProviderContext from '_mysource/context/provider/ProviderContext';
 import Provider from '_mysource/models/Provider';
 import { TextField } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 
 /**
@@ -28,7 +28,7 @@ const schema = yup.object().shape({
 function ProviderDialog(props) {
   const defaultValues = new Provider();
   const { dialog, closeDialog, create, update } = useContext(ProviderContext);
-
+  const { t } = useTranslation('relationspage');
   const { control, watch, reset, handleSubmit, formState, getValues } = useForm({
     mode: 'onChange',
     defaultValues,
@@ -92,12 +92,13 @@ function ProviderDialog(props) {
     closeComposeDialog();
   }
 
-  /**
-   * Remove Event
-   */
-  function handleRemove() {
-    //  dispatch(removeContact(id));
-    closeComposeDialog();
+  const renderClose = () => {
+    return <div className="px-16">
+      <Button className="m-4" variant="contained"
+        onClick={closeComposeDialog}>
+        {t('CLOSE')}
+      </Button>
+    </div>
   }
 
   return (
@@ -113,7 +114,7 @@ function ProviderDialog(props) {
       <AppBar position="static" elevation={0}>
         <Toolbar className="flex w-full">
           <Typography variant="subtitle1" color="inherit">
-            {dialog.type === 'new' ? 'New Provider' : 'Edit Provider'}
+            {dialog.type === 'new' ? t('DIALOGNEWPROV') : t('DIALOGEDITPROV')}
           </Typography>
         </Toolbar>
         <div className="flex flex-col items-center justify-center pb-24">
@@ -143,7 +144,7 @@ function ProviderDialog(props) {
                   {...field}
                   value={field.value || ''}
                   className="mb-24"
-                  label="Name"
+                  label={t('NAME')}
                   id="name"
                   error={!!errors.name}
                   helperText={errors?.name?.message}
@@ -166,7 +167,7 @@ function ProviderDialog(props) {
                   {...field}
                   value={field.value || ''}
                   className="mb-24"
-                  label="Fiscal Code"
+                  label={t('FISCALCODE')}
                   id="fiscal_code"
                   variant="outlined"
                   fullWidth
@@ -187,7 +188,7 @@ function ProviderDialog(props) {
                   {...field}
                   value={field.value || ''}
                   className="mb-24"
-                  label="Phone"
+                  label={t('PHONE')}
                   id="phone"
                   variant="outlined"
                   fullWidth
@@ -229,7 +230,7 @@ function ProviderDialog(props) {
                   {...field}
                   value={field.value || ''}
                   className="mb-24"
-                  label="Notes"
+                  label={t('NOTES')}
                   id="notes"
                   variant="outlined"
                   multiline
@@ -250,9 +251,10 @@ function ProviderDialog(props) {
                 type="submit"
                 disabled={isEmpty(dirtyFields) || !isValid}
               >
-                Add
+                {t('ADD')}
               </Button>
             </div>
+            {renderClose()}
           </DialogActions>
         ) : (
           <DialogActions className="justify-between p-4 pb-16">
@@ -263,15 +265,10 @@ function ProviderDialog(props) {
                 type="submit"
                 disabled={isEmpty(dirtyFields) || !isValid}
               >
-                Save
+                {t('SAVE')}
               </Button>
             </div>
-            <div className="px-16">
-              <Button className="m-4" variant="contained"
-                onClick={closeComposeDialog}>
-                Close
-              </Button>
-            </div>
+            {renderClose()}
           </DialogActions>
         )}
       </form>

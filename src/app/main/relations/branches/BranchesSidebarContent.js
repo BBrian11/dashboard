@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import { motion } from 'framer-motion';
 import BranchContext from '_mysource/context/branch/BranchContext';
+import { useTranslation } from 'react-i18next';
 
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
@@ -41,6 +42,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 
 function BranchesSidebarContent(props) {
   const { openNewDialog } = useContext(BranchContext);
+  const { t } = useTranslation('relationspage');
 
   return (
     <div className="p-0 lg:p-24 lg:ltr:pr-4 lg:rtl:pl-4">
@@ -64,7 +66,7 @@ function BranchesSidebarContent(props) {
             className="w-full"
             onClick={(ev) => openNewDialog()}
           >
-            New Branch
+            {t('NEWBRANCH')}
           </Button>
         </div>
 
@@ -78,7 +80,7 @@ function BranchesSidebarContent(props) {
             <Icon className="list-item-icon text-16" color="action">
               people
             </Icon>
-            <ListItemText className="truncate" primary="All branches" disableTypography />
+            <ListItemText className="truncate" primary={t('ALLBRANCHES')} disableTypography />
           </StyledListItem>
         </List>
       </Paper>

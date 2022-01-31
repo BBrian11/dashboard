@@ -10,29 +10,73 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import CartContext from '_mysource/context/cart/CartContext';
-import { useMemo, useContext, useState } from "react";
+import { useContext, useState } from "react";
+import { closeDialog, openDialog } from 'app/store/fuse/dialogSlice';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useDispatch } from 'react-redux';
+import Button from '@mui/material/Button';
+import { useTranslation } from 'react-i18next';
 
+
+const providerInitialState = {}
 
 const CartHeader = ({ pageLayout }) => {
-    const [provider, setProvider] = useState({});
+    const [provider, setProvider] = useState(providerInitialState);
     const { providers } = useProviders();
     const { setOrderProvider } = useContext(CartContext);
+    const dispatch = useDispatch();
+    const { t } = useTranslation('ecommercepage');
 
     const handleChange = (ev) => {
+
+        // If the provider was never set we don't show the confirm dialog
+        if (provider === providerInitialState) {
+            setNewProvider(ev);
+        } else {
+            dispatch(openDialog({
+                children: (
+                    <>
+                        <DialogTitle id="alert-dialog-title">{t('PROVIDERDIALOGTITLE')}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {t('PROVIDERDIALOGTEXT')}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => dispatch(closeDialog())} color="primary">
+                                {t('CANCEL')}
+                            </Button>
+                            <Button onClick={() => {
+                                dispatch(closeDialog());
+                                setNewProvider(ev);
+                            }} color="primary" autoFocus>
+                                OK
+                            </Button>
+                        </DialogActions>
+                    </>
+                ),
+            }));
+        }
+    }
+
+    const setNewProvider = (ev) => {
         setOrderProvider(ev.target.value);
         setProvider(ev.target.value);
     }
 
     const renderProviderSelect = () => {
         return (
-            <Box className="flex items-center w-full max-w-512 px-8 py-4">
+            <Box className="flex w-full max-w-512 px-8 py-4">
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Proveedor</InputLabel>
+                    <InputLabel id="demo-simple-select-label">{t('PROVIDER')}</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={provider}
-                        label="Proveedor"
+                        label={t('PROVIDER')}
                         onChange={handleChange} >
                         {providers.map(p => (
                             <MenuItem key={`${p.id}${p.name}`} value={p}>{p.name}</MenuItem>
@@ -53,7 +97,7 @@ const CartHeader = ({ pageLayout }) => {
                     animate={{ x: 0, transition: { delay: 0.2 } }}
                     delay={300}
                     className="sm:flex text-16 md:text-24 mx-12 font-semibold">
-                    Place Order
+                    {t('CARTTITLE')}
                 </Typography>
 
                 <Hidden lgUp>
@@ -67,7 +111,7 @@ const CartHeader = ({ pageLayout }) => {
                 </Hidden>
             </div>
 
-            <div className="flex flex-1 items-center justify-center px-12">
+            <div className="flex flex-1 px-12">
                 {renderProviderSelect()}
             </div>
         </div>

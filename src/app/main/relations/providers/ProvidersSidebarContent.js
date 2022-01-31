@@ -10,7 +10,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import { motion } from 'framer-motion';
 import ProviderContext from '_mysource/context/provider/ProviderContext';
-//import { openNewContactDialog } from './store/contactsSlice';
+import { useTranslation } from 'react-i18next';
+
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   color: 'inherit!important',
@@ -41,6 +42,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 
 function ProvidersSidebarContent(props) {
   const { openNewDialog } = useContext(ProviderContext);
+  const { t } = useTranslation('relationspage');
 
   return (
     <div className="p-0 lg:p-24 lg:ltr:pr-4 lg:rtl:pl-4">
@@ -64,7 +66,7 @@ function ProvidersSidebarContent(props) {
             className="w-full"
             onClick={(ev) => openNewDialog()}
           >
-            New Provider
+            {t('NEWPROVIDER')}
           </Button>
         </div>
 
@@ -78,7 +80,7 @@ function ProvidersSidebarContent(props) {
             <Icon className="list-item-icon text-16" color="action">
               people
             </Icon>
-            <ListItemText className="truncate" primary="All providers" disableTypography />
+            <ListItemText className="truncate" primary={t('ALLPROVIDERS')} disableTypography />
           </StyledListItem>
         </List>
       </Paper>

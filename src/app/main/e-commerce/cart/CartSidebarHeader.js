@@ -1,10 +1,12 @@
+import { useTranslation } from 'react-i18next';
 
 
 const CartSidebarHeader = () => {
+    const { t } = useTranslation('ecommercepage');
 
     return (
         <div className="p-24">
-            <h4>My Cart</h4>
+            <h4>{t('MYCARTTITLE')}</h4>
         </div>
     )
 }
