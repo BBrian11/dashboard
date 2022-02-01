@@ -9,11 +9,13 @@ import Format from '_mysource/Format';
 import { useParams } from 'react-router-dom';
 import FuseLoading from '@fuse/core/FuseLoading';
 import Config from './../../../../_mysource/config/Config';
+import { useTranslation } from 'react-i18next';
 
 
 function ProductsList(props) {
   const { products, loading, retrieve, openEditDialog } = useContext(ProductContext);
   const routeParams = useParams();
+  const { t } = useTranslation('ecommercepage');
 
   useEffect(() => {
     const { branchid } = routeParams;
@@ -62,7 +64,7 @@ function ProductsList(props) {
         )
       },
       {
-        Header: 'Enabled',
+        Header: t('ENABLED'),
         accessor: 'enabled',
         className: 'font-medium',
         sortable: true,
@@ -92,7 +94,7 @@ function ProductsList(props) {
     return (
       <div className="flex flex-1 items-center justify-center h-full">
         <Typography color="textSecondary" variant="h5">
-          There are no products!
+          {t('NOPRODUCTS')}
         </Typography>
       </div>
     );

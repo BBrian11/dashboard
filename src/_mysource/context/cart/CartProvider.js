@@ -18,7 +18,6 @@ const CartProvider = ({ children }) => {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const createOrder = async (order) => {
-        console.log(order)
         try {
             if (!order.provider) {
                 showSnackbar({ message: 'Seleecionar un proveedor', options: { variant: 'error' } });
@@ -35,9 +34,12 @@ const CartProvider = ({ children }) => {
         }
     }
 
+    /**
+     * Sets the provider to a new order. Current order status is lost.
+     * @param {*} provider 
+     */
     const setOrderProvider = (provider) => {
-        const { order } = state;
-        const o = (order) ? order : new Order();
+        const o = new Order();
         o.provider = provider;
         dispatch({ type: ACTIONS.ADD_PROVIDER, payload: o });
     }

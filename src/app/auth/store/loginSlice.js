@@ -67,7 +67,7 @@ export const submitLoginWithFireBase =
 
 const initialState = {
   success: false,
-  errors: [],
+  errors: null,
 };
 
 const loginSlice = createSlice({
@@ -76,7 +76,7 @@ const loginSlice = createSlice({
   reducers: {
     loginSuccess: (state, action) => {
       state.success = true;
-      state.errors = [];
+      state.errors = null;
     },
     loginError: (state, action) => {
       state.success = false;

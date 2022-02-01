@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import useBranches from '../../../../_mysource/hooks/useBranches';
 import List from '@mui/material/List';
 import Icon from '@mui/material/Icon';
+import { useTranslation } from 'react-i18next';
 
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
@@ -39,7 +40,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 
 function OrdersSidebarContent(props) {
   const { branches } = useBranches();
-
+  const { t } = useTranslation('ecommercepage');
 
   return (
     <div className="p-0 lg:p-24 lg:ltr:pr-4 lg:rtl:pl-4">
@@ -65,13 +66,13 @@ function OrdersSidebarContent(props) {
               <Icon className="list-item-icon text-16" color="action">
                 people
               </Icon>
-              <ListItemText className="truncate" primary="All orders" disableTypography />
+              <ListItemText className="truncate" primary={t('ALLORDERS')} disableTypography />
             </StyledListItem>
           </List>
 
           <List>
             <ListSubheader className="pl-12" disableSticky>
-              SUCURSAL
+              {t('BRANCHTITLE')}
             </ListSubheader>
 
             {branches.length > 0 &&

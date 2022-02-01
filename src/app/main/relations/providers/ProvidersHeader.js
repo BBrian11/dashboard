@@ -1,20 +1,19 @@
 import Hidden from '@mui/material/Hidden';
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import Paper from '@mui/material/Paper';
 import { ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectMainTheme } from 'app/store/fuse/settingsSlice';
-//import { setContactsSearchText } from './store/contactsSlice';
+import { useTranslation } from 'react-i18next';
 
 function ProvidersHeader(props) {
   //  const dispatch = useDispatch();
   //  const searchText = useSelector(({ contactsApp }) => contactsApp.contacts.searchText);
   const searchText = '';
   const mainTheme = useSelector(selectMainTheme);
+  const { t } = useTranslation('relationspage');
 
   return (
     <div className="flex flex-1 items-center justify-between p-4 sm:p-24">
@@ -47,7 +46,7 @@ function ProvidersHeader(props) {
             delay={300}
             className="hidden sm:flex text-16 md:text-24 mx-12 font-semibold"
           >
-            Proveedores
+            {t('TITLEPROV')}
           </Typography>
         </div>
       </div>

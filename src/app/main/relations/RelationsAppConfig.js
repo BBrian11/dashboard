@@ -1,6 +1,12 @@
 import { lazy } from 'react';
 import { Redirect } from 'react-router-dom';
 import { authRoles } from 'app/auth';
+import i18next from 'i18next';
+import en from './i18n/en';
+import es from './i18n/es';
+
+i18next.addResourceBundle('en', 'relationspage', en);
+i18next.addResourceBundle('es', 'relationspage', es);
 
 const RelationsAppConfig = {
   settings: {

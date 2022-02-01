@@ -12,15 +12,16 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { submitLogin } from 'app/auth/store/loginSlice';
-import React, { useState } from "react";
-import { auth } from "../../firebase";
-import { useHistory } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import NotificationTemplate from '_mysource/shared-components/snackbar/NotificationTemplate';
+import isNil from "lodash/isNil";
 
-import axios from 'axios';
-import { setUserSession } from '../../Utils/Common';
-
+/**
+ * Form Validation Schema
+ */
 const schema = yup.object().shape({
   //email: yup.string().email('You must enter a valid email').required('You must enter a email'),
   password: yup
@@ -35,58 +36,50 @@ const defaultValues = {
   remember: true,
 };
 
- function Login(props) {
-  const [loading, setLoading] = useState(false);
-  const username = useFormInput('');
-  const password = useFormInput('');
-  const [error, setError] = useState(null);
-  const methods = useForm()
-  
+function LoginPage() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const login = useSelector(({ auth }) => auth.login);
   const { control, formState, handleSubmit, reset, getValues } = useForm({
     mode: 'onChange',
     defaultValues,
     resolver: yupResolver(schema),
   });
   const dispatch = useDispatch();
-
   const { isValid, dirtyFields, errors } = formState;
 
-  
-  
-  const handleLogin = () => {
-    setError(null);
-    setLoading(true);
-    axios.post('http://localhost:4000/users/signin', { username: username.value, password: password.value }).then(response => {
-      setLoading(false);
-      setUserSession(response.data.token, response.data.user);
-      props.history.push('/dashboard');
-    }).catch(error => {
-      setLoading(false);
-      if (error.response.status === 401) setError(error.response.data.message);
-      else setError("Something went wrong. Please try again later.");
+  useEffect(() => {
+    if (!isNil(login.errors)) {
+      showSnackbar({ message: 'Usuario o contrasena incorrectos', options: { variant: 'error' } });
+    }
+  }, [login.errors])
+
+  function onSubmit(model) {
+    dispatch(submitLogin(model));
+    reset(defaultValues);
+  }
+
+  const showSnackbar = (item) => {
+    enqueueSnackbar('', {
+      content: () => (
+        <NotificationTemplate
+          item={item} />
+      )
     });
   }
- 
-   
-        
-   
+
   return (
     <div className="flex flex-col flex-auto items-center justify-center p-16 sm:p-32">
       <div className="flex flex-col items-center justify-center w-full">
         <motion.div initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }}>
           <Card className="w-full max-w-384">
             <CardContent className="flex flex-col items-center justify-center p-16 sm:p-24 md:p-32">
-              <img className="w-128 m-32" src="assets/images/logos/fuse.svg" alt="logo" />
-
-              <Typography variant="h6" className="mt-16 mb-24 font-semibold text-18 sm:text-24">
-                Login to your account
-              </Typography>
+              <img className="w-128 m-32" src="assets/images/logos/hamburga.png" alt="logo" />
 
               <form
                 name="loginForm"
                 noValidate
                 className="flex flex-col justify-center w-full"
-                onSubmit={handleLogin}
+                onSubmit={handleSubmit(onSubmit)}
               >
                 <Controller
                   name="email"
@@ -98,7 +91,6 @@ const defaultValues = {
                       label="Email"
                       autoFocus
                       type="email"
-                      {...username}
                       error={!!errors.email}
                       helperText={errors?.email?.message}
                       variant="outlined"
@@ -117,7 +109,6 @@ const defaultValues = {
                       className="mb-16"
                       label="Password"
                       type="password"
-                      {...password}
                       error={!!errors.password}
                       helperText={errors?.password?.message}
                       variant="outlined"
@@ -127,58 +118,24 @@ const defaultValues = {
                   )}
                 />
 
-                <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between">
-                  <Controller
-                    name="remember"
-                    control={control}
-                    render={({ field }) => (
-                      <FormControl>
-                        <FormControlLabel label="Remember Me" control={<Checkbox {...field} />} />
-                      </FormControl>
-                    )}
-                  />
-
-                  <Link className="font-normal" to="/pages/auth/forgot-password">
-                    Forgot Password?
-                  </Link>
-                </div>
-
-                
-     
-      <Button type="submit" variant="contained"
+                <Button
+                  variant="contained"
                   color="primary"
                   className="w-224 mx-auto mt-16"
                   aria-label="LOG IN"
-                 value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} > Login</Button><br />
-    </form>
-              
-              <div className="my-24 flex items-center justify-center">
-                <Divider className="w-32" />
-                <span className="mx-8 font-semibold">OR</span>
-                <Divider className="w-32" />
-              </div>
-
-              <Button variant="contained" color="secondary" size="small" className="w-192 mb-8">
-                Log in with Google
-              </Button>
+                  disabled={_.isEmpty(dirtyFields) || !isValid}
+                  type="submit"
+                >
+                  Login
+                </Button>
+              </form>
 
             </CardContent>
           </Card>
         </motion.div>
       </div>
     </div>
-    
   );
 }
-const useFormInput = initialValue => {
-  const [value, setValue] = useState(initialValue);
 
-  const handleChange = e => {
-    setValue(e.target.value);
-  }
-  return {
-    value,
-    onChange: handleChange
-  }
-}
-export default Login;
+export default LoginPage;

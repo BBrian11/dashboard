@@ -7,12 +7,14 @@ import { motion } from 'framer-motion';
 import Icon from '@mui/material/Icon';
 import { useState, useContext } from 'react';
 import ProductContext from '_mysource/context/product/ProductContext';
+import { useTranslation } from 'react-i18next';
 
 
 const CartToolbar = () => {
     const { searchProducts } = useContext(ProductContext);
     const [searchText, setSearchText] = useState();
     const mainTheme = useSelector(selectMainTheme);
+    const { t } = useTranslation('ecommercepage');
 
     const handleSearch = (e) => {
         searchProducts({ name: e.target.value })
@@ -30,7 +32,7 @@ const CartToolbar = () => {
                     <Icon color="action">search</Icon>
 
                     <Input
-                        placeholder="Search for products"
+                        placeholder={t('PRODUCTSEARCH')}
                         className="flex flex-1 px-16"
                         disableUnderline
                         fullWidth

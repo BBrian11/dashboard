@@ -1,7 +1,12 @@
 const locale = {
   APPLICATIONS: 'Applications',
-  EXAMPLE: 'Example',
-  RELATIONS: 'Relations'
+  RELATIONS: 'Relations',
+  PROVIDERS: 'Providers',
+  BRANCHES: 'Branches',
+  ECOMMERCE: 'E-Commerce',
+  CART: 'Cart',
+  PRODUCTS: 'Products',
+  ORDERS: 'Orders'
 };
 
 export default locale;

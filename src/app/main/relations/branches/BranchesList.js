@@ -5,11 +5,13 @@ import { useMemo, useEffect, useState, useContext } from 'react';
 import EnhancedTable from '_mysource/shared-components/enhaced-table/EnhacedTable';
 import BranchContext from '_mysource/context/branch/BranchContext';
 import FuseLoading from '@fuse/core/FuseLoading';
+import { useTranslation } from 'react-i18next';
 
 
 function BranchesList(props) {
   const [filteredData, setFilteredData] = useState(null);
   const { branches, loading, openEditDialog } = useContext(BranchContext);
+  const { t } = useTranslation('relationspage');
 
   useEffect(() => {
     setFilteredData(branches);
@@ -76,7 +78,7 @@ function BranchesList(props) {
     return (
       <div className="flex flex-1 items-center justify-center h-full">
         <Typography color="textSecondary" variant="h5">
-          There are no branch offices!
+          {t('NOBRANCHES')}
         </Typography>
       </div>
     );

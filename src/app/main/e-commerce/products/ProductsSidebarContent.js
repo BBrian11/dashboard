@@ -10,8 +10,15 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Paper from '@mui/material/Paper';
 import { motion } from 'framer-motion';
 import ProductContext from '_mysource/context/product/ProductContext';
-import { useContext, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import useBranches from './../../../../_mysource/hooks/useBranches';
+import useProviders from './../../../../_mysource/hooks/useProviders';
+import Box from '@mui/material/Box';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import isNil from 'lodash/isNil';
+import { useTranslation } from 'react-i18next';
 
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
@@ -29,6 +36,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
         ? 'rgba(0, 0, 0, .05)!important'
         : 'rgba(255, 255, 255, .1)!important',
     pointerEvents: 'none',
+
     '& .list-item-icon': {
       color: 'inherit',
     },
@@ -42,8 +50,66 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 }));
 
 function ProductsSidebarContent(props) {
-  const { openNewDialog } = useContext(ProductContext);
+  const [provider, setProvider] = useState({});
+  const [branch, setBranch] = useState({});
+  const { openNewDialog, retrieve } = useContext(ProductContext);
   const { branches } = useBranches();
+  const { providers } = useProviders();
+  const { t } = useTranslation('ecommercepage');
+
+  const handleBranchChange = (ev) => {
+    const id = isNil(provider) ? null : provider.id;
+    setBranch(ev.target.value);
+    retrieve(ev.target.value.id, id);
+  }
+
+  const handleProviderChange = (ev) => {
+    const id = isNil(branch) ? null : branch.id;
+    setProvider(ev.target.value);
+    retrieve(id, ev.target.value.id);
+  }
+
+  const handleAll = () => {
+    setProvider(null);
+    setBranch(null);
+    retrieve();
+  }
+
+  const renderProviderSelect = () => {
+    return (
+      <Box className="flex w-full px-8 py-4">
+        <FormControl fullWidth>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={provider}
+            onChange={handleProviderChange} >
+            {providers.map(p => (
+              <MenuItem key={`${p.id}${p.name}`} value={p}>{p.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+    )
+  }
+
+  const renderBranchSelect = () => {
+    return (
+      <Box className="flex w-full px-8 py-4">
+        <FormControl fullWidth>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={branch}
+            onChange={handleBranchChange} >
+            {branches.map(p => (
+              <MenuItem key={`${p.id}${p.name}`} value={p}>{p.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+    )
+  }
 
   return (
     <div className="p-0 lg:p-24 lg:ltr:pr-4 lg:rtl:pl-4">
@@ -67,7 +133,7 @@ function ProductsSidebarContent(props) {
             className="w-full"
             onClick={(ev) => { openNewDialog() }}
           >
-            New Product
+            {t('NEWPRODUCT')}
           </Button>
         </div>
 
@@ -75,37 +141,27 @@ function ProductsSidebarContent(props) {
           <List>
             <StyledListItem
               button
-              component={NavLinkAdapter}
-              to="/e-commerce/products/all"
-              activeClassName="active"
-            >
+              onClick={handleAll}
+              activeClassName="active">
               <Icon className="list-item-icon text-16" color="action">
                 people
               </Icon>
-              <ListItemText className="truncate" primary="All products" disableTypography />
+              <ListItemText className="truncate" primary={t('ALLPRODUCTS')} disableTypography />
             </StyledListItem>
           </List>
 
           <List>
             <ListSubheader className="pl-12" disableSticky>
-              SUCURSAL
+              {t('BRANCHTITLE')}
             </ListSubheader>
+            {renderBranchSelect()}
+          </List>
 
-            {branches.length > 0 &&
-              branches.map((c) => (
-                <StyledListItem
-                  button
-                  component={NavLinkAdapter}
-                  to={`/e-commerce/products/branch/${c.id}`}
-                  activeClassName="active"
-                  key={c.id}
-                >
-                  <Icon className="list-item-icon" color="action">
-                    place
-                  </Icon>
-                  <ListItemText primary={c.name} disableTypography />
-                </StyledListItem>
-              ))}
+          <List>
+            <ListSubheader className="pl-12" disableSticky>
+              {t('PROVIDERTITLE')}
+            </ListSubheader>
+            {renderProviderSelect()}
           </List>
         </div>
 

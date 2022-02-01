@@ -1,11 +1,9 @@
 import i18next from 'i18next';
-import ar from './navigation-i18n/ar';
+import es from './navigation-i18n/es';
 import en from './navigation-i18n/en';
-import tr from './navigation-i18n/tr';
 
 i18next.addResourceBundle('en', 'navigation', en);
-i18next.addResourceBundle('tr', 'navigation', tr);
-i18next.addResourceBundle('ar', 'navigation', ar);
+i18next.addResourceBundle('es', 'navigation', es);
 
 const navigationConfig = [
   {
@@ -34,6 +32,7 @@ const navigationConfig = [
           {
             id: 'relations-providers',
             title: 'Providers',
+            translate: 'PROVIDERS',
             type: 'item',
             url: '/relations/providers',
             exact: true,
@@ -41,6 +40,7 @@ const navigationConfig = [
           {
             id: 'relations-branches',
             title: 'Branches',
+            translate: 'BRANCHES',
             type: 'item',
             url: '/relations/branches',
             exact: true,
@@ -58,6 +58,7 @@ const navigationConfig = [
           {
             id: 'e-commerce-cart',
             title: 'Cart',
+            translate: 'CART',
             type: 'item',
             url: '/e-commerce/cart/',
             exact: true
@@ -65,13 +66,15 @@ const navigationConfig = [
           {
             id: 'e-commerce-products',
             title: 'Products',
+            translate: 'PRODUCTS',
             type: 'item',
             url: '/e-commerce/products/all',
             exact: true,
           },
           {
-            id: 'e-commerce-cart',
+            id: 'e-commerce-orders',
             title: 'Orders',
+            translate: 'ORDERS',
             type: 'item',
             url: '/e-commerce/orders/all',
             exact: true

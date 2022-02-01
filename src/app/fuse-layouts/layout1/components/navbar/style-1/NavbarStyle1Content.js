@@ -53,8 +53,7 @@ function NavbarStyle1Content(props) {
       </AppBar>
 
       <StyledContent option={{ suppressScrollX: true, wheelPropagation: false }}>
-        <UserNavbarHeader />
-
+        {/*<UserNavbarHeader />*/}
         <Navigation layout="vertical" />
       </StyledContent>
     </Root>

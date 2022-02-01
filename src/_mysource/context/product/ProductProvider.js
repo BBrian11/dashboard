@@ -22,19 +22,19 @@ const ProductProvider = ({ children }) => {
         //    retrieveCategories();
     }, [])
 
-    const retrieve = (branchid = null) => {
+    const retrieve = (branch = null, provider = null, activeonly = false) => {
         dispatchLoading();
-        const p = (branchid) ? svc.current.retrieveByBranch(branchid) : svc.current.retrieveAll();
-        p.then(results => {
-            dispatch({ type: ACTIONS.RETRIEVE, payload: results });
-        }).catch(error => {
-            dispatchError(error);
-        });
+        svc.current.retrieve(branch, provider, activeonly)
+            .then(results => {
+                dispatch({ type: ACTIONS.RETRIEVE, payload: results });
+            }).catch(error => {
+                dispatchError(error);
+            });
     }
 
     const retrieveById = (id) => {
         dispatchLoading();
-        svc.current.retrieve()
+        svc.current.retrieveById(id)
             .then(results => {
                 dispatch({ type: ACTIONS.RETRIEVE, payload: results });
             })

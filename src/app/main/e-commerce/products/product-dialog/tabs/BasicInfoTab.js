@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 
 
 function BasicInfoTab(props) {
@@ -11,6 +12,7 @@ function BasicInfoTab(props) {
   const { control, formState } = methods;
   const { errors } = formState;
   const [checked, setChecked] = useState(control._defaultValues.enabled);
+  const { t } = useTranslation('ecommercepage');
 
 
   return (
@@ -26,7 +28,7 @@ function BasicInfoTab(props) {
               {...{ inputProps: { 'aria-label': 'Enabled' } }}
               onChange={(e) => field.onChange(e.target.checked)}
               checked={field.value} />
-            <Typography>Enabled</Typography>
+            <Typography>{t('ENABLED')}</Typography>
           </Stack>
         )}
       />
@@ -42,7 +44,7 @@ function BasicInfoTab(props) {
             error={!!errors.name}
             required
             helperText={errors?.name?.message}
-            label="Name"
+            label={t('NAME')}
             autoFocus
             id="name"
             variant="outlined"
@@ -60,7 +62,7 @@ function BasicInfoTab(props) {
             value={field.value || ''}
             className="mt-8 mb-16"
             id="description"
-            label="Description"
+            label={t('DESCRIPTION')}
             type="text"
             multiline
             rows={5}

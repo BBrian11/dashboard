@@ -1,22 +1,39 @@
-import { useEffect, useContext, useState } from "react";
+import { useContext, useEffect } from "react";
 import ProductContext from '_mysource/context/product/ProductContext';
 import ProductItemCard from './ProductItemCard';
 import Masonry from 'react-masonry-css';
 import Typography from '@mui/material/Typography';
+import CartContext from '_mysource/context/cart/CartContext';
+import { useTranslation } from 'react-i18next';
 
 
 const CartContent = () => {
-    const { loading, retrieve, filtered_products } = useContext(ProductContext);
+    const { retrieve, filtered_products } = useContext(ProductContext);
+    const { order } = useContext(CartContext);
+    const uefProviderId = (order && order.provider) ? order.provider.id : -1;
+    const { t } = useTranslation('ecommercepage');
 
     useEffect(() => {
-        retrieve();
-    }, []);
+        if (uefProviderId > 0) {
+            retrieve(null, order.provider.id, true);
+        }
+    }, [uefProviderId]);
+
+    if (uefProviderId === -1) {
+        return (
+            <div className="flex flex-1 items-center justify-center h-full">
+                <Typography color="textSecondary" variant="h5">
+                    {t('NOPROVIDER')}
+                </Typography>
+            </div>
+        );
+    }
 
     if (filtered_products.length === 0) {
         return (
             <div className="flex flex-1 items-center justify-center h-full">
                 <Typography color="textSecondary" variant="h5">
-                    There are no products!
+                    {t('NOPRODUCTS')}
                 </Typography>
             </div>
         );
@@ -44,7 +61,8 @@ const CartContent = () => {
                         product={p}
                         className="w-full rounded-20 shadow mb-16"
                         variateDescSize={false} />
-                )}
+                )
+                }
             </Masonry>
         </div>
     )
